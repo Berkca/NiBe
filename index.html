@@ -297,7 +297,7 @@
     }
 
     .puzzle-tile {
-      background-image: url('puzzle.jpg');
+      background-image: url('foto1.jpg');
       background-size: 300% 300%;
       cursor: pointer;
     }
@@ -360,7 +360,7 @@
       </div>
       <div class="card">
         <div class="card-title">öffne wenn... du einen schlechten tag hast</div>
-        <div class="card-body">atme tief durch, mein schatz. schlechte tage gehören dazu, aber du musst sie nicht alleine durchstehen. du bist stärker als du denkst und ich bin unfassbar stolz auf dich. morgen sieht die welt schon wieder heller aus.</div>
+        <div class="card-body">atme tief durch, mein schatz. schlechte tage gehören dazu, aber du musst sie nicht alleine durchstehen. du bist stärke als du denkst und ich bin unfassbar stolz auf dich. morgen sieht die welt schon wieder heller aus.</div>
       </div>
       <div class="card">
         <div class="card-title">öffne wenn... du nicht schlafen kannst</div>
@@ -608,7 +608,6 @@
     let selectedTile = null;
 
     function initPuzzle() {
-      // shuffle
       puzzleTiles = [0, 1, 2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - 0.5);
       selectedTile = null;
       renderPuzzle();
@@ -622,7 +621,6 @@
         const tile = document.createElement('div');
         tile.className = 'puzzle-tile';
         
-        // calculate original position for background-position
         const row = Math.floor(tileIdx / 3);
         const col = tileIdx % 3;
         tile.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
@@ -640,7 +638,6 @@
       if (selectedTile === null) {
         selectedTile = pos;
       } else {
-        // swap
         let temp = puzzleTiles[selectedTile];
         puzzleTiles[selectedTile] = puzzleTiles[pos];
         puzzleTiles[pos] = temp;

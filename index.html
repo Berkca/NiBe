@@ -3,315 +3,660 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NİBE</title>
+  <title>nibe</title>
   <style>
     :root {
-      --bg-color: #0b0b0c;
-      --card-bg: #161618;
-      --accent-color: #8b0000;
-      --text-color: #f5f5f7;
-      --text-muted: #a1a1a6;
-      --cream: #f2e9e1;
-      --border: #26262a;
+      --bg: #0d0d0d;
+      --card-bg: #1a0a10;
+      --border: #4a1525;
+      --accent: #800020;
+      --text: #f5f0eb;
+      --subtext: #a39b98;
+      --gold: #d4af37;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      text-transform: lowercase;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      display: flex;
-      justify-content: center;
-      padding-bottom: 90px;
-    }
-
-    /* Lock Screen */
-    #lock-screen {
-      position: fixed;
-      inset: 0;
-      background-color: var(--bg-color);
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      z-index: 1000;
-      padding: 20px;
+      padding: 20px 15px 100px;
+      user-select: none;
     }
 
-    #lock-screen h2 {
-      font-size: 32px;
-      letter-spacing: 4px;
+    .container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    header {
+      text-align: center;
       margin-bottom: 25px;
-      color: var(--cream);
+      padding-top: 10px;
     }
 
-    #lock-screen input {
+    h1 {
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      color: var(--text);
+      margin-bottom: 5px;
+      font-weight: 300;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--subtext);
+    }
+
+    /* audio player */
+    .audio-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      padding: 14px 20px;
-      border-radius: 14px;
-      color: #fff;
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 15px;
-      width: 100%;
-      max-width: 280px;
-      outline: none;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
 
-    #lock-screen button {
-      background-color: var(--accent-color);
-      color: #fff;
+    .play-btn {
+      background: var(--accent);
       border: none;
-      padding: 14px 35px;
-      border-radius: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .audio-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .audio-title {
+      font-size: 0.9rem;
       font-weight: 600;
-      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Layout */
-    .app-container {
-      width: 100%;
-      max-width: 430px;
-      padding: 20px;
+    .audio-sub {
+      font-size: 0.75rem;
+      color: var(--subtext);
+    }
+
+    /* navigation tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--subtext);
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* views */
+    .view {
       display: none;
     }
 
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .tab-content.active {
+    .view.active {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: 4px;
-      color: var(--cream);
-      text-align: center;
-      margin: 15px 0 25px 0;
-    }
-
+    /* cards & lists */
     .card {
       background: var(--card-bg);
-      border-radius: 20px;
-      padding: 20px;
       border: 1px solid var(--border);
-      margin-bottom: 20px;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 15px;
     }
 
-    /* Navigation Bar (Bottom) */
-    .nav-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(22, 22, 24, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid var(--border);
+    .card-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--text);
       display: flex;
-      justify-content: space-around;
-      padding: 12px 0 25px 0;
-      z-index: 100;
-    }
-
-    .nav-item {
-      color: var(--text-muted);
-      font-size: 11px;
-      border: none;
-      background: none;
-      display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      gap: 4px;
     }
 
-    .nav-item.active {
-      color: var(--cream);
+    .card-body {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--subtext);
+      white-space: pre-line;
     }
 
-    /* Timer */
-    .timer-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .timer-number {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--cream);
-    }
-
-    .timer-label {
-      font-size: 9px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    /* Interactive Elements */
-    .btn-action {
-      background: var(--accent-color);
-      color: #fff;
-      border: none;
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 15px;
-      margin-top: 10px;
-    }
-
-    .letter-btn {
-      width: 100%;
+    .reason-item {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      color: var(--cream);
-      padding: 16px;
-      border-radius: 14px;
-      text-align: left;
+      border-radius: 12px;
+      padding: 15px;
       margin-bottom: 10px;
-      font-size: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
     }
 
-    .reason-box {
-      min-height: 100px;
+    .reason-num {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .reason-text {
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    /* games selection */
+    .game-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .game-card-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text);
+      transition: transform 0.2s;
+    }
+
+    .game-card-btn:active {
+      transform: scale(0.98);
+    }
+
+    .game-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 17px;
-      color: var(--cream);
-      font-style: italic;
-      padding: 10px;
+      gap: 8px;
+    }
+
+    .game-card-desc {
+      font-size: 0.8rem;
+      color: var(--subtext);
+    }
+
+    /* quiz interface */
+    .quiz-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .quiz-question {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 15px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .opt-btn.correct {
+      background: #1e4620;
+      border-color: #2e7d32;
+    }
+
+    .opt-btn.wrong {
+      background: #4a1515;
+      border-color: #c62828;
+    }
+
+    /* kuss catcher */
+    #catcher-canvas {
+      width: 100%;
+      height: 350px;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .heart-target {
+      position: absolute;
+      font-size: 28px;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+    }
+
+    /* photo puzzle */
+    .puzzle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .puzzle-tile {
+      background-image: url('puzzle.jpg');
+      background-size: 300% 300%;
+      cursor: pointer;
+    }
+
+    .back-btn {
+      background: transparent;
+      border: none;
+      color: var(--subtext);
+      font-size: 0.8rem;
+      margin-bottom: 15px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-action {
+      background: var(--accent);
+      border: none;
+      color: var(--text);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
-  <!-- Passwort Screen -->
-  <div id="lock-screen">
-    <h2>NİBE</h2>
-    <input type="password" id="password-input" placeholder="Passwort eingeben...">
-    <button onclick="checkPassword()">Öffnen</button>
-  </div>
+  <div class="container">
+    <header>
+      <h1>nibe</h1>
+      <div class="subtitle">für meine lieblingsperson</div>
+    </header>
 
-  <div class="app-container" id="app">
-    <div class="logo">NİBE</div>
-
-    <!-- HOME TAB -->
-    <div id="home" class="tab-content active">
-      <div class="card" style="text-align: center;">
-        <p style="font-size: 18px; color: var(--cream); font-style: italic;">
-          „Askim benim, sen bunu okursan bil ki seni seviyorum“
-        </p>
+    <!-- audio player -->
+    <div class="audio-card">
+      <button class="play-btn" id="playBtn" onclick="toggleAudio()">▶</button>
+      <div class="audio-info">
+        <div class="audio-title">unser lied</div>
+        <div class="audio-sub">für nisa & berkcan</div>
       </div>
+      <audio id="myAudio" loop src="song.mp3"></audio>
+    </div>
 
+    <!-- navigation -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('briefe')">briefe</button>
+      <button class="tab-btn" onclick="switchTab('gründe')">12 gründe</button>
+      <button class="tab-btn" onclick="switchTab('spiele')">spiele</button>
+    </div>
+
+    <!-- VIEW 1: BRIEFE -->
+    <div id="briefe" class="view active">
       <div class="card">
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); text-align: center; margin-bottom: 12px;">Wir sind zusammen seit</div>
-        <div class="timer-grid">
-          <div><div class="timer-number" id="days">0</div><div class="timer-label">Tage</div></div>
-          <div><div class="timer-number" id="hours">0</div><div class="timer-label">Std</div></div>
-          <div><div class="timer-number" id="minutes">0</div><div class="timer-label">Min</div></div>
-          <div><div class="timer-number" id="seconds">0</div><div class="timer-label">Sek</div></div>
+        <div class="card-title">öffne wenn... du mich vermisst</div>
+        <div class="card-body">wenn du mich vermisst, schließ kurz die augen und denk an unser letztes lachen zusammen. egal wie viele kilometer uns trennen, mein herz ist immer ganz nah bei dir. ruf mich an, sobald du kannst. ich bin da.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">öffne wenn... du einen schlechten tag hast</div>
+        <div class="card-body">atme tief durch, mein schatz. schlechte tage gehören dazu, aber du musst sie nicht alleine durchstehen. du bist stärker als du denkst und ich bin unfassbar stolz auf dich. morgen sieht die welt schon wieder heller aus.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">öffne wenn... du nicht schlafen kannst</div>
+        <div class="card-body">mache es dir gemütlich, kuschel dich ein und stell dir vor, ich liege direkt neben dir und streichle deine haare. die welt schläft schon – du darfst jetzt auch loslassen. gute nacht, mein liebe.</div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: GRÜNDE -->
+    <div id="gründe" class="view">
+      <div class="reason-item"><div class="reason-num">01</div><div class="reason-text">dein wunderschönes lachen, das sofort meinen ganzen tag erhellt.</div></div>
+      <div class="reason-item"><div class="reason-num">02</div><div class="reason-text">wie du mich ansiehst und mir ohne worte zeigst, dass ich angekommen bin.</div></div>
+      <div class="reason-item"><div class="reason-num">03</div><div class="reason-text">deine fürsorgliche art und wie sehr du dich um die menschen kümmerst, die du liebst.</div></div>
+      <div class="reason-item"><div class="reason-num">04</div><div class="reason-text">dass ich bei dir 100% ich selbst sein kann – ohne mich zu verstellen.</div></div>
+      <div class="reason-item"><div class="reason-num">05</div><div class="reason-text">unsere gemeinsamen insider und dass wir über die gleichen dinge lachen.</div></div>
+      <div class="reason-item"><div class="reason-num">06</div><div class="reason-text">deine umarmungen, die sich jedes mal wie nach hause kommen anfühlen.</div></div>
+      <div class="reason-item"><div class="reason-num">07</div><div class="reason-text">wie du mich unterstützt und an mich glaubst, selbst wenn ich es vergesse.</div></div>
+      <div class="reason-item"><div class="reason-num">08</div><div class="reason-text">deine kleine süße sturheit, die dich nur noch liebenswerter macht.</div></div>
+      <div class="reason-item"><div class="reason-num">09</div><div class="reason-text">weil du nicht nur meine partnerin bist, sondern auch meine beste freundin.</div></div>
+      <div class="reason-item"><div class="reason-num">10</div><div class="reason-text">wie wir stundenlang einfach nur quatschen oder zusammen schweigen können.</div></div>
+      <div class="reason-item"><div class="reason-num">11</div><div class="reason-text">dein herz aus gold und deine unendliche liebevolligkeit.</div></div>
+      <div class="reason-item"><div class="reason-num">12</div><div class="reason-text">einfach dafür, dass es dich gibt und du mein leben perfekt machst.</div></div>
+    </div>
+
+    <!-- VIEW 3: SPIELE MENU & GAMES -->
+    <div id="spiele" class="view">
+      
+      <!-- MENU -->
+      <div id="game-menu" class="game-menu">
+        <div class="game-card-btn" onclick="openGame('quiz')">
+          <div class="game-card-title">❓ pärchen-quiz</div>
+          <div class="game-card-desc">wie gut kennst du unsere beziehung?</div>
+        </div>
+        <div class="game-card-btn" onclick="openGame('catcher')">
+          <div class="game-card-title">💋 kuss-catcher</div>
+          <div class="game-card-desc">fange so viele herzen wie du kannst!</div>
+        </div>
+        <div class="game-card-btn" onclick="openGame('puzzle')">
+          <div class="game-card-title">🧩 foto-puzzle</div>
+          <div class="game-card-desc">setze unser lieblingsfoto wieder zusammen.</div>
         </div>
       </div>
-    </div>
 
-    <!-- BRIEFE TAB -->
-    <div id="letters" class="tab-content">
-      <button class="letter-btn" onclick="showLetter('Vermisst', 'Wenn du mich vermisst, denk daran, dass ich immer nur einen Anruf von dir entfernt bin. Du bist mein Zuhause.')">💌 Öffne mich, wenn du mich vermisst</button>
-      <button class="letter-btn" onclick="showLetter('Traurig', 'Lächle mein Schatz. Kein Problem der Welt ist größer als unsere Liebe. Ich bin immer an deiner Seite.')">💌 Öffne mich, wenn du traurig bist</button>
-      <button class="letter-btn" onclick="showLetter('Brauchst', 'Egal was passiert: Ich bin da. Du musst nie wieder irgendetwas alleine durchstehen.')">💌 Öffne mich, wenn du mich brauchst</button>
-    </div>
-
-    <!-- 100 GRÜNDE TAB -->
-    <div id="reasons" class="tab-content">
-      <div class="card">
-        <div class="reason-box" id="reason-text">Tippe auf den Button unten...</div>
+      <!-- GAME: QUIZ -->
+      <div id="game-quiz" style="display:none;">
+        <button class="back-btn" onclick="closeGames()">← zurück zur übersicht</button>
+        <div class="quiz-box">
+          <div id="quiz-content"></div>
+        </div>
       </div>
-      <button class="btn-action" onclick="nextReason()">Nächster Grund ❤️</button>
+
+      <!-- GAME: CATCHER -->
+      <div id="game-catcher" style="display:none;">
+        <button class="back-btn" onclick="closeGames()">← zurück zur übersicht</button>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <span>punkte: <b id="score">0</b></span>
+          <span>zeit: <b id="timer">15</b>s</span>
+        </div>
+        <div id="catcher-canvas"></div>
+        <button class="btn-action" onclick="startCatcherGame()">spiel starten</button>
+      </div>
+
+      <!-- GAME: PUZZLE -->
+      <div id="game-puzzle" style="display:none;">
+        <button class="back-btn" onclick="closeGames()">← zurück zur übersicht</button>
+        <div class="puzzle-grid" id="puzzleGrid"></div>
+        <div id="puzzle-status" style="text-align:center; font-size:0.85rem; color:var(--subtext);">klicke auf zwei teile, um ihre position zu tauschen.</div>
+      </div>
+
     </div>
 
-    <!-- SONGS TAB -->
-    <div id="songs" class="tab-content">
-      <div class="card">
-        <div style="color: var(--cream); font-weight: 600; font-size: 17px;">Unser Lied</div>
-        <div style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Füge hier euren Lieblingssong ein</div>
-      </div>
-    </div>
   </div>
 
-  <!-- Bottom Nav -->
-  <nav class="nav-bar" id="nav-bar" style="display:none;">
-    <button class="nav-item active" onclick="switchTab('home', this)">🏠 Home</button>
-    <button class="nav-item" onclick="switchTab('letters', this)">💌 Briefe</button>
-    <button class="nav-item" onclick="switchTab('reasons', this)">💕 Gründe</button>
-    <button class="nav-item" onclick="switchTab('songs', this)">🎵 Songs</button>
-  </nav>
-
   <script>
-    function checkPassword() {
-      if (document.getElementById('password-input').value === 'Limon') {
-        document.getElementById('lock-screen').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        document.getElementById('nav-bar').style.display = 'flex';
+    // audio control
+    const audio = document.getElementById('myAudio');
+    const playBtn = document.getElementById('playBtn');
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        playBtn.innerHTML = '❚❚';
       } else {
-        alert('Falsches Passwort ❤️');
+        audio.pause();
+        playBtn.innerHTML = '▶';
       }
     }
 
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    // tab navigation
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      
+      event.target.classList.add('active');
       document.getElementById(tabId).classList.add('active');
-      btn.classList.add('active');
     }
 
-    function showLetter(title, text) {
-      alert(`💌 ${title}\n\n${text}`);
+    // game view manager
+    function openGame(gameId) {
+      document.getElementById('game-menu').style.display = 'none';
+      document.getElementById('game-quiz').style.display = 'none';
+      document.getElementById('game-catcher').style.display = 'none';
+      document.getElementById('game-puzzle').style.display = 'none';
+
+      document.getElementById('game-' + gameId).style.display = 'block';
+
+      if(gameId === 'quiz') initQuiz();
+      if(gameId === 'puzzle') initPuzzle();
     }
 
-    const reasonsList = [
-      "Weil dein Lächeln meinen ganzen Tag erhellt.",
-      "Weil du mich immer verstehst, selbst ohne Worte.",
-      "Weil du das schönste Herz der Welt hast.",
-      "Weil mit dir alles mehr Spaß macht.",
-      "Weil ich bei dir genau so sein kann, wie ich bin."
+    function closeGames() {
+      document.getElementById('game-quiz').style.display = 'none';
+      document.getElementById('game-catcher').style.display = 'none';
+      document.getElementById('game-puzzle').style.display = 'none';
+      document.getElementById('game-menu').style.display = 'flex';
+      clearInterval(catcherInterval);
+      clearInterval(timerInterval);
+    }
+
+    /* --- GAME 1: QUIZ --- */
+    const quizData = [
+      {
+        q: "1. frage: wer von uns braucht morgens länger um wach zu werden?",
+        opts: ["a) nisa", "b) berkcan", "c) beide sind sofort hellwach"],
+        correct: [0]
+      },
+      {
+        q: "2. frage: was machen wir am liebsten zusammen wenn wir einfach entspannen wollen?",
+        opts: ["a) zusammen kochen", "b) stundenlang kuscheln & serien schauen", "c) lange spaziergänge machen"],
+        correct: [1]
+      },
+      {
+        q: "3. frage: wer von uns schlägt öfter vor spontan etwas zu unternehmen?",
+        opts: ["a) nisa", "b) berkcan", "c) das kommt immer ganz spontan von beiden"],
+        correct: [2]
+      },
+      {
+        q: "4. frage: was ist die wichtigste regel in unserer beziehung?",
+        opts: ["a) immer ehrlich zueinander sein", "b) nie böse aufeinander einschlafen", "c) sich jeden tag sagen wie sehr man sich liebt"],
+        correct: [0, 1, 2]
+      },
+      {
+        q: "5. frage: was beschreibt uns als paar am besten?",
+        opts: ["a) absolutes chaos, aber perfekt zusammen", "b) seelenverwandte & beste freunde", "c) einfach ein unschlagbares team"],
+        correct: [1, 2]
+      }
     ];
 
-    function nextReason() {
-      const random = reasonsList[Math.floor(Math.random() * reasonsList.length)];
-      document.getElementById('reason-text').innerText = random;
+    let currentQ = 0;
+
+    function initQuiz() {
+      currentQ = 0;
+      renderQuestion();
     }
 
-    const startDate = new Date('2023-09-28T00:00:00');
-    function updateTimer() {
-      const diff = new Date() - startDate;
-      document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-      document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      document.getElementById('minutes').innerText = Math.floor((diff / 1000 / 60) % 60);
-      document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
+    function renderQuestion() {
+      const container = document.getElementById('quiz-content');
+      if (currentQ >= quizData.length) {
+        container.innerHTML = `<div style="text-align:center;">
+          <h3 style="margin-bottom:10px;">perfekt geschafft! ❤️</h3>
+          <p style="font-size:0.85rem; color:var(--subtext);">du kennst uns einfach am besten.</p>
+          <button class="btn-action" onclick="initQuiz()">nochmal spielen</button>
+        </div>`;
+        return;
+      }
+
+      const q = quizData[currentQ];
+      let html = `<div class="quiz-question">${q.q}</div><div class="quiz-options">`;
+      q.opts.forEach((opt, idx) => {
+        html += `<button class="opt-btn" onclick="checkAnswer(${idx})">${opt}</button>`;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
     }
-    setInterval(updateTimer, 1000);
-    updateTimer();
+
+    function checkAnswer(idx) {
+      const q = quizData[currentQ];
+      const btns = document.querySelectorAll('.opt-btn');
+      
+      if (q.correct.includes(idx)) {
+        btns[idx].classList.add('correct');
+        setTimeout(() => {
+          currentQ++;
+          renderQuestion();
+        }, 800);
+      } else {
+        btns[idx].classList.add('wrong');
+      }
+    }
+
+    /* --- GAME 2: KUSS CATCHER --- */
+    let score = 0;
+    let timeLeft = 15;
+    let catcherInterval, timerInterval;
+
+    function startCatcherGame() {
+      score = 0;
+      timeLeft = 15;
+      document.getElementById('score').innerText = score;
+      document.getElementById('timer').innerText = timeLeft;
+      
+      const canvas = document.getElementById('catcher-canvas');
+      canvas.innerHTML = '';
+
+      clearInterval(catcherInterval);
+      clearInterval(timerInterval);
+
+      catcherInterval = setInterval(spawnHeart, 600);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = timeLeft;
+        if(timeLeft <= 0) {
+          clearInterval(catcherInterval);
+          clearInterval(timerInterval);
+          canvas.innerHTML = `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; width:80%;">
+            <b>zeit vorbei!</b><br>du hast ${score} küsse gefangen! 💋
+          </div>`;
+        }
+      }, 1000);
+    }
+
+    function spawnHeart() {
+      const canvas = document.getElementById('catcher-canvas');
+      const heart = document.createElement('div');
+      heart.className = 'heart-target';
+      heart.innerText = '💋';
+      
+      const x = Math.random() * (canvas.clientWidth - 40) + 20;
+      const y = Math.random() * (canvas.clientHeight - 40) + 20;
+      
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+
+      heart.onclick = () => {
+        score++;
+        document.getElementById('score').innerText = score;
+        heart.remove();
+      };
+
+      canvas.appendChild(heart);
+      setTimeout(() => { if(heart.parentNode) heart.remove(); }, 1200);
+    }
+
+    /* --- GAME 3: FOTO PUZZLE --- */
+    let puzzleTiles = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    let selectedTile = null;
+
+    function initPuzzle() {
+      // shuffle
+      puzzleTiles = [0, 1, 2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - 0.5);
+      selectedTile = null;
+      renderPuzzle();
+    }
+
+    function renderPuzzle() {
+      const grid = document.getElementById('puzzleGrid');
+      grid.innerHTML = '';
+      
+      puzzleTiles.forEach((tileIdx, currentPos) => {
+        const tile = document.createElement('div');
+        tile.className = 'puzzle-tile';
+        
+        // calculate original position for background-position
+        const row = Math.floor(tileIdx / 3);
+        const col = tileIdx % 3;
+        tile.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+        
+        if (selectedTile === currentPos) {
+          tile.style.outline = '2px solid var(--accent)';
+        }
+
+        tile.onclick = () => onTileClick(currentPos);
+        grid.appendChild(tile);
+      });
+    }
+
+    function onTileClick(pos) {
+      if (selectedTile === null) {
+        selectedTile = pos;
+      } else {
+        // swap
+        let temp = puzzleTiles[selectedTile];
+        puzzleTiles[selectedTile] = puzzleTiles[pos];
+        puzzleTiles[pos] = temp;
+        selectedTile = null;
+
+        checkPuzzleSolved();
+      }
+      renderPuzzle();
+    }
+
+    function checkPuzzleSolved() {
+      const isSolved = puzzleTiles.every((val, idx) => val === idx);
+      if (isSolved) {
+        document.getElementById('puzzle-status').innerHTML = '<b style="color:var(--text);">geschafft! wunderschön gelöst ❤️</b>';
+      }
+    }
   </script>
 </body>
 </html>

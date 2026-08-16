@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NİBE</title>
+  <style>
+    :root {
+      --bg-color: #0b0b0c;
+      --card-bg: #161618;
+      --accent-color: #8b0000;
+      --text-color: #f5f5f7;
+      --text-muted: #a1a1a6;
+      --cream: #f2e9e1;
+      --border: #26262a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      padding-bottom: 90px;
+    }
+
+    /* Lock Screen */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    #lock-screen h2 {
+      font-size: 32px;
+      letter-spacing: 4px;
+      margin-bottom: 25px;
+      color: var(--cream);
+    }
+
+    #lock-screen input {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 14px 20px;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 280px;
+      outline: none;
+    }
+
+    #lock-screen button {
+      background-color: var(--accent-color);
+      color: #fff;
+      border: none;
+      padding: 14px 35px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    /* Layout */
+    .app-container {
+      width: 100%;
+      max-width: 430px;
+      padding: 20px;
+      display: none;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--cream);
+      text-align: center;
+      margin: 15px 0 25px 0;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    /* Navigation Bar (Bottom) */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(22, 22, 24, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 25px 0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      color: var(--text-muted);
+      font-size: 11px;
+      border: none;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-item.active {
+      color: var(--cream);
+    }
+
+    /* Timer */
+    .timer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .timer-number {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .timer-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Interactive Elements */
+    .btn-action {
+      background: var(--accent-color);
+      color: #fff;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    .letter-btn {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      padding: 16px;
+      border-radius: 14px;
+      text-align: left;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .reason-box {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 17px;
+      color: var(--cream);
+      font-style: italic;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Passwort Screen -->
+  <div id="lock-screen">
+    <h2>NİBE</h2>
+    <input type="password" id="password-input" placeholder="Passwort eingeben...">
+    <button onclick="checkPassword()">Öffnen</button>
+  </div>
+
+  <div class="app-container" id="app">
+    <div class="logo">NİBE</div>
+
+    <!-- HOME TAB -->
+    <div id="home" class="tab-content active">
+      <div class="card" style="text-align: center;">
+        <p style="font-size: 18px; color: var(--cream); font-style: italic;">
+          „Askim benim, sen bunu okursan bil ki seni seviyorum“
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); text-align: center; margin-bottom: 12px;">Wir sind zusammen seit</div>
+        <div class="timer-grid">
+          <div><div class="timer-number" id="days">0</div><div class="timer-label">Tage</div></div>
+          <div><div class="timer-number" id="hours">0</div><div class="timer-label">Std</div></div>
+          <div><div class="timer-number" id="minutes">0</div><div class="timer-label">Min</div></div>
+          <div><div class="timer-number" id="seconds">0</div><div class="timer-label">Sek</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRIEFE TAB -->
+    <div id="letters" class="tab-content">
+      <button class="letter-btn" onclick="showLetter('Vermisst', 'Wenn du mich vermisst, denk daran, dass ich immer nur einen Anruf von dir entfernt bin. Du bist mein Zuhause.')">💌 Öffne mich, wenn du mich vermisst</button>
+      <button class="letter-btn" onclick="showLetter('Traurig', 'Lächle mein Schatz. Kein Problem der Welt ist größer als unsere Liebe. Ich bin immer an deiner Seite.')">💌 Öffne mich, wenn du traurig bist</button>
+      <button class="letter-btn" onclick="showLetter('Brauchst', 'Egal was passiert: Ich bin da. Du musst nie wieder irgendetwas alleine durchstehen.')">💌 Öffne mich, wenn du mich brauchst</button>
+    </div>
+
+    <!-- 100 GRÜNDE TAB -->
+    <div id="reasons" class="tab-content">
+      <div class="card">
+        <div class="reason-box" id="reason-text">Tippe auf den Button unten...</div>
+      </div>
+      <button class="btn-action" onclick="nextReason()">Nächster Grund ❤️</button>
+    </div>
+
+    <!-- SONGS TAB -->
+    <div id="songs" class="tab-content">
+      <div class="card">
+        <div style="color: var(--cream); font-weight: 600; font-size: 17px;">Unser Lied</div>
+        <div style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Füge hier euren Lieblingssong ein</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="nav-bar" id="nav-bar" style="display:none;">
+    <button class="nav-item active" onclick="switchTab('home', this)">🏠 Home</button>
+    <button class="nav-item" onclick="switchTab('letters', this)">💌 Briefe</button>
+    <button class="nav-item" onclick="switchTab('reasons', this)">💕 Gründe</button>
+    <button class="nav-item" onclick="switchTab('songs', this)">🎵 Songs</button>
+  </nav>
+
+  <script>
+    function checkPassword() {
+      if (document.getElementById('password-input').value === 'Limon') {
+        document.getElementById('lock-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('nav-bar').style.display = 'flex';
+      } else {
+        alert('Falsches Passwort ❤️');
+      }
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function showLetter(title, text) {
+      alert(`💌 ${title}\n\n${text}`);
+    }
+
+    const reasonsList = [
+      "Weil dein Lächeln meinen ganzen Tag erhellt.",
+      "Weil du mich immer verstehst, selbst ohne Worte.",
+      "Weil du das schönste Herz der Welt hast.",
+      "Weil mit dir alles mehr Spaß macht.",
+      "Weil ich bei dir genau so sein kann, wie ich bin."
+    ];
+
+    function nextReason() {
+      const random = reasonsList[Math.floor(Math.random() * reasonsList.length)];
+      document.getElementById('reason-text').innerText = random;
+    }
+
+    const startDate = new Date('2023-09-28T00:00:00');
+    function updateTimer() {
+      const diff = new Date() - startDate;
+      document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      document.getElementById('minutes').innerText = Math.floor((diff / 1000 / 60) % 60);
+      document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>
